@@ -1,0 +1,14 @@
+premiere {
+    subtitle("--- PRUEBA: GUERRA ENTRE ENTEROS Y DECIMALES ---");
+    
+    // La variable nace siendo un número entero puro (INT)
+    
+    cast pago_diario = 100;
+    
+    // ERROR SEMÁNTICO: El tipado es tan estricto que no permite asignarle
+    // un decimal (FLOAT) a alguien que firmó contrato como entero.
+
+    pago_diario = 100.50;
+    
+    subtitle("¡Corten! La contabilidad no acepta centavos en esa cuenta.");
+}

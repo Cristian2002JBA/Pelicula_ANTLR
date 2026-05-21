@@ -1,0 +1,6 @@
+premiere {
+    subtitle("Iniciando la prueba de impresion de variable fantasma...");
+    
+    // ERROR SEMÁNTICO: 'actor_principal' nunca fue declarada con 'cast' o 'star'
+    subtitle(actor_principal);
+}

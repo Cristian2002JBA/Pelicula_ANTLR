@@ -1,0 +1,47 @@
+premiere {
+    // --- FASE 1: PRE-PRODUCCIÓN ---
+    // Mensaje inicial para arrancar el rodaje
+    subtitle("Iniciando produccion cinematografica");
+    
+    // Declaración estricta de variables (Roles) usando cast y star
+    cast titulo = "El Resplandor del Codigo"; // Variable tipo STRING
+    star presupuesto_total = 5000000;         // Variable tipo INT
+    cast cantidad_actores = 10;               // Variable tipo INT
+    
+    // Operación matemática pura (INT / INT) segura (previniendo división por cero)
+    cast pago_por_actor = presupuesto_total / cantidad_actores;
+    
+    // Mostrando los resultados en la pantalla
+    subtitle(titulo);
+    subtitle("El pago calculado por actor es:");
+    subtitle(pago_por_actor);
+    
+    // --- FASE 2: EVALUACIÓN DE GUION ---
+    ticket es_exito = hit;           // Variable tipo BOOLEAN (true)
+    rating expectativa = 9.5;        // Variable tipo FLOAT
+    rating minimo_aceptable = 8.0;   // Variable tipo FLOAT
+    
+    // Condición (if-else) comparando variables estrictamente del mismo tipo (FLOAT > FLOAT)
+    plot_twist(expectativa > minimo_aceptable) {
+        subtitle("El estudio ha dado luz verde al proyecto");
+    } alternate_ending {
+        subtitle("El proyecto ha sido cancelado");
+    }
+    
+    // Segunda condición comprobando booleanos (BOOLEAN == BOOLEAN)
+    plot_twist(es_exito == hit) {
+        subtitle("La audiencia amo la pelicula");
+    }
+    
+    // --- FASE 3: RODAJE DE SECUELAS ---
+    subtitle("Iniciando grabacion de la trilogia:");
+    
+    // Ciclo iterativo (for) utilizando una variable de control numérica (secuela)
+    replay (secuela = 1; secuela < 4; secuela = secuela + 1) {
+        subtitle("Grabando parte numero:");
+        subtitle(secuela);
+    }
+    
+    // --- CORTE FINAL ---
+    subtitle("Rodaje finalizado con exito");
+}

@@ -1,0 +1,14 @@
+premiere {
+    subtitle("--- PRUEBA: COMPARACION DE TIPOS DISTINTOS ---");
+    
+    cast nombre_pelicula = "Titanic";
+    cast premios_oscar = 11;
+    
+    // ERROR SEMÁNTICO: El guionista intenta comparar si un texto es mayor que un número
+    
+    plot_twist(nombre_pelicula > premios_oscar) {
+        subtitle("Esto no tiene sentido lógico.");
+    }
+    
+    subtitle("¡Corten! El analizador falló al comparar peras con manzanas.");
+}

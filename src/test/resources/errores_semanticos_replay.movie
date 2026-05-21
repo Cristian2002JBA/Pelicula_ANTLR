@@ -1,0 +1,37 @@
+premiere {
+    // --- PRE-PRODUCCIÓN ---
+    cast director = "Martin Scorsese";
+    cast escena = "Robo al Banco Central";
+    cast presupuesto = 150;
+    cast actores_principales = 3;
+    
+    subtitle("Iniciando rodaje de: ");
+    subtitle(escena);
+    subtitle("Bajo la direccion de: ");
+    subtitle(director);
+    
+    // Evaluando el presupuesto
+    plot_twist(presupuesto > 100) {
+        subtitle("El presupuesto esta aprobado para usar explosivos.");
+    } alternate_ending {
+        subtitle("Tendremos que usar CGI barato.");
+    }
+    
+    // --- RODAJE ---
+    subtitle("Acomodando luces y camaras...");
+    subtitle("¡Listos para la primera escena de accion!");
+    
+    // El asistente de dirección anota el tipo de toma en la claqueta
+    cast claqueta = "Escena 1 - Toma Inicial";
+    
+    // ERROR SEMÁNTICO: El asistente de dirección intenta usar texto 
+    // en lugar de un número entero (FRAME) para iterar en las repeticiones
+    replay (toma = claqueta; toma < 5; toma = toma + 1) {
+        subtitle("¡Accion!");
+        subtitle("La explosion ocurrio a destiempo...");
+        subtitle("¡Corten! Vamos a repetirlo.");
+    }
+    
+    // --- POST-PRODUCCIÓN ---
+    subtitle("Este texto no deberia imprimirse porque el rodaje se congelo por el error de la claqueta.");
+}

@@ -1,0 +1,12 @@
+premiere {
+    subtitle("--- PRUEBA: SUMA INVALIDA (CROSSOVER PROHIBIDO) ---");
+    
+    cast titulo = "Rocky ";
+    cast numero_secuela = 5;
+    
+    // ERROR SEMÁNTICO: La suma (+) en tu lenguaje es estrictamente para matemáticas.
+    // El Visitor rechazará intentar sumar un STRING con un INT.
+    cast pelicula = titulo + numero_secuela;
+    
+    subtitle("¡Corten! Los efectos especiales de suma solo funcionan con números.");
+}

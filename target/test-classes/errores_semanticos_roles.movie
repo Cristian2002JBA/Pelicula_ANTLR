@@ -1,0 +1,11 @@
+premiere {
+    // El director asigna el papel a un actor
+    
+    cast protagonista = "Leonardo DiCaprio";
+    
+    // Por error de la producción, se intenta declarar nuevamente el mismo rol
+    
+    star protagonista = "Brad Pitt";
+    
+    subtitle("¡Corten! Este texto no debería verse porque hay dos actores peleando por el mismo rol.");
+}

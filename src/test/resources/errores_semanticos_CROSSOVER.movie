@@ -1,0 +1,32 @@
+premiere {
+    // --- NEGOCIACIONES DEL ESTUDIO ---
+    cast productora = "Universal Studios";
+    cast titulo_original = "Rapidos y Furiosos";
+    cast taquilla_millones = 500;
+    
+    subtitle("Estudio a cargo de la produccion: ");
+    subtitle(productora);
+    
+    // Los ejecutivos evalúan si la película justifica secuelas
+    plot_twist(taquilla_millones > 300) {
+        subtitle("¡La pelicula fue un EXITO masivo en taquilla!");
+        
+        
+        cast numero_secuelas = 10;
+        
+        subtitle("El productor ejecutivo exige exprimir la franquicia al maximo.");
+        subtitle("Calculando el titulo para toda la saga...");
+        
+        // ERROR SEMÁNTICO: Intentar usar el operador FRANCHISE (*) con texto.
+        // Se intenta multiplicar el texto del título por el número de secuelas.
+        cast nombre_franquicia = titulo_original * numero_secuelas;
+        
+        subtitle("La nueva saga se llamara:");
+        subtitle(nombre_franquicia);
+    } alternate_ending {
+        subtitle("Fue un fracaso, la cancelamos.");
+    }
+    
+    // --- FIN DE LA REUNIÓN ---
+    subtitle("Corten. Si el analizador semántico funciona bien, todo debió detenerse en la multiplicación.");
+}

@@ -1,0 +1,30 @@
+premiere {
+    subtitle("Iniciando reporte financiero de: 'El escape'");
+
+    cast presupuesto = 50000;
+    cast semanas_en_cartelera = 4;
+    cast ingresos_por_semana = 15000;
+
+    cast ingresos_totales = 0;
+    cast semana_actual = 1;
+
+    replay (semana_actual = 1; semana_actual < semanas_en_cartelera + 1; semana_actual = semana_actual + 1) {
+        ingresos_totales = ingresos_totales + ingresos_por_semana;
+        
+        ingresos_por_semana = ingresos_por_semana - 2000;
+        
+        subtitle("Ingresos acumulados (semana actual):");
+        subtitle(ingresos_totales);
+    }
+
+    cast balance_final = ingresos_totales - presupuesto;
+    
+    subtitle("El balance final de la pelicula es:");
+    subtitle(balance_final);
+
+    plot_twist (balance_final == hit) {
+        subtitle("Aprobado: La pelicula es un exito comercial.");
+    } alternate_ending {
+        subtitle("Alerta: La pelicula tuvo perdidas.");
+    }
+}

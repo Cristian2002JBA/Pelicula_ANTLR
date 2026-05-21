@@ -1,0 +1,15 @@
+premiere {
+    subtitle("--- PRUEBA: DIVISION POR CERO ---");
+    
+    // Tenemos ganancias pero todos los actores renunciaron
+    cast taquilla_total = 1000000;
+    cast cantidad_actores = 0;
+    
+    subtitle("Calculando el pago por actor...");
+    
+    // ERROR SEMÁNTICO: El administrador intenta dividir entre cero
+    
+    cast pago = taquilla_total / cantidad_actores;
+    
+    subtitle("¡Corten! El universo explotó por intentar dividir entre cero.");
+}

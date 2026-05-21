@@ -1,0 +1,11 @@
+premiere {
+    subtitle("--- PRUEBA: DOBLE DECLARACION (SINDICALISMO) ---");
+    
+    // Contratamos al actor para el papel principal
+    cast protagonista = "Leo DiCaprio";
+    
+    // ERROR SEMÁNTICO: Intentamos usar la palabra de declaración otra vez con el mismo papel
+    star protagonista = "Brad Pitt";
+    
+    subtitle("¡Corten! Tienes a dos personas firmadas para el mismo papel exclusivo.");
+}

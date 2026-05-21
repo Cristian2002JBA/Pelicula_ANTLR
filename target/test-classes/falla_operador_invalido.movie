@@ -1,0 +1,12 @@
+premiere {
+    subtitle("--- PRUEBA: OPERADOR MAYOR-QUE EN TEXTOS ---");
+    
+    cast heroe = "Batman";
+    cast villano = "Joker";
+    
+    // ERROR SEMÁNTICO: El operador '>' (BOX_OFFICE_LEADER) solo está programado
+    // para procesar números. Evaluar si Batman es mayor que Joker causará falla.
+    plot_twist(heroe > villano) {
+        subtitle("Batman gana la pelea.");
+    }
+}

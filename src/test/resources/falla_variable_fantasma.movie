@@ -1,0 +1,9 @@
+premiere {
+    subtitle("--- PRUEBA: VARIABLE FANTASMA (NO DECLARADA) ---");
+    
+    // ERROR SEMÁNTICO: El director intenta usar a un actor que nunca fue contratado
+    // La variable 'actor_misterioso' no tiene un 'cast' o 'star' previo.
+    subtitle(actor_misterioso);
+    
+    subtitle("¡Corten! El actor no se presentó al set porque no existe.");
+}

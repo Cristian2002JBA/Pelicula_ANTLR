@@ -1,0 +1,12 @@
+premiere {
+    subtitle("--- PRUEBA: MATEMATICA FANTASMA ---");
+    
+    cast presupuesto = 1000;
+    
+    // ERROR SEMÁNTICO: Estamos tratando de hacer una resta matemática (CUT), 
+    // pero la variable 'gastos_extra' es un fantasma que no existe en el guion.
+    
+    cast dinero_restante = presupuesto - gastos_extra;
+    
+    subtitle("¡Corten! El contador está usando cifras fantasma.");
+}
