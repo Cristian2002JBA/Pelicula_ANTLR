@@ -14,22 +14,26 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
         return "";
     }
 
+    // En Python los booleanos empiezan con mayúscula (True/False)
     @Override
     protected String getTrueString() { return "True"; }
 
     @Override
     protected String getFalseString() { return "False"; }
 
+    // Python es de tipado dinámico y no usa palabras reservadas como let/var/int para declarar
     @Override
     protected String getDeclarationString(String id, String value, String type, boolean isCast, boolean isStar) {
         return id + " = " + value;
     }
 
+    // La asignación es idéntica a la declaración en cuanto a sintaxis
     @Override
     protected String getAssignmentString(String id, String value) {
         return id + " = " + value;
     }
 
+    // Python no lleva punto y coma al final de las sentencias
     @Override
     protected String getExpressionStatementString(String expr) {
         return expr;
@@ -63,6 +67,8 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
         return sb.toString();
     }
 
+    // Python no tiene un bucle "for clásico" al estilo C (for(i=0; i<10; i++)),
+    // por lo que traducimos nuestro "replay" a un bucle "while" equivalente.
     @Override
     public String visitForStmt(ForStmtContext ctx) {
         StringBuilder sb = new StringBuilder();
@@ -70,6 +76,7 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
         String init = "";
         String update = "";
 
+        // Verificamos si hay una variable de inicialización
         if (ctx.ROLE(0) != null && ctx.getChild(2).getText().equals(ctx.ROLE(0).getText())) {
             init = ctx.ROLE(0).getText() + " = " + visit(ctx.expr(0));
             sb.append(getIndent()).append(init).append("\n");
@@ -97,6 +104,9 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
         return sb.toString();
     }
 
+    // Función auxiliar para manejar bloques en Python.
+    // Incrementa la indentación antes de procesar el bloque y si este está vacío,
+    // inserta 'pass' para evitar un error de sintaxis en Python.
     private String formatBlockPython(BlockContext ctx) {
         StringBuilder sb = new StringBuilder();
         indentationLevel++;

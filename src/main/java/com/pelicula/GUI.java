@@ -52,6 +52,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -95,6 +96,9 @@ public class GUI extends JFrame {
     String currentFilePath = null;
     JFileChooser fileChooser;
     GhostTextCompleter ghostCompleter;
+    // Controla si actualmente estamos en tema oscuro o claro
+    boolean temaOscuro = true;
+    JButton btnTema;  // referencia al botón para poder actualizar su texto
 
     public GUI() {
         // Configuramos el tema oscuro y los estilos de la interfaz al arrancar
@@ -243,6 +247,35 @@ public class GUI extends JFrame {
         btnPanel.add(createPillButton("\uD83D\uDCE4  Exportar", e -> {
             mostrarMenuExportar(btnPanel.getComponent(btnPanel.getComponentCount()-1));
         }, BTN_BG, BTN_HOVER));
+
+        // Botón para cambiar entre tema claro y oscuro
+        btnTema = new JButton("\u2600\uFE0F  Claro") {
+            private boolean hovering = false;
+            {
+                addMouseListener(new MouseAdapter() {
+                    @Override public void mouseEntered(MouseEvent e) { hovering = true; repaint(); }
+                    @Override public void mouseExited(MouseEvent e) { hovering = false; repaint(); }
+                });
+            }
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Color bg = hovering ? new Color(180, 140, 20) : new Color(150, 110, 10);
+                g2.setColor(bg);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
+                super.paintComponent(g);
+            }
+        };
+        btnTema.setFont(new Font("SansSerif", Font.BOLD, 12));
+        btnTema.setForeground(Color.WHITE);
+        btnTema.setContentAreaFilled(false);
+        btnTema.setBorderPainted(false);
+        btnTema.setFocusPainted(false);
+        btnTema.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnTema.setMargin(new Insets(7, 18, 7, 18));
+        btnTema.addActionListener(e -> alternarTema());
+        btnPanel.add(btnTema);
 
         header.add(btnPanel, BorderLayout.EAST);
         return header;
@@ -632,6 +665,43 @@ public class GUI extends JFrame {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al importar: " + ex.getMessage());
+        }
+    }
+
+    // Cambia la interfaz completa entre tema oscuro y tema claro
+    private void alternarTema() {
+        temaOscuro = !temaOscuro;
+        try {
+            if (temaOscuro) {
+                FlatDarculaLaf.setup();
+                btnTema.setText("\u2600\uFE0F  Claro");
+                // Restauramos los colores del editor al tema oscuro (monokai)
+                Theme theme = Theme.load(getClass().getResourceAsStream(
+                    "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml"));
+                theme.apply(editorArea);
+                editorArea.setBackground(BG_EDITOR);
+                editorArea.setCurrentLineHighlightColor(new Color(40, 40, 50));
+                editorArea.setCaretColor(Color.WHITE);
+                consoleArea.setBackground(BG_CONSOLE);
+                consoleArea.setForeground(ACCENT_SUCCESS);
+            } else {
+                FlatIntelliJLaf.setup();
+                btnTema.setText("\uD83C\uDF19  Oscuro");
+                // Aplicamos el tema claro al editor (eclipse es el m\u00e1s limpio en blanco)
+                Theme theme = Theme.load(getClass().getResourceAsStream(
+                    "/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml"));
+                theme.apply(editorArea);
+                editorArea.setBackground(new Color(252, 252, 252));
+                editorArea.setCurrentLineHighlightColor(new Color(232, 242, 254));
+                editorArea.setCaretColor(Color.BLACK);
+                consoleArea.setBackground(new Color(240, 240, 240));
+                consoleArea.setForeground(new Color(0, 100, 60));
+            }
+            // Propagamos el cambio de look-and-feel a todos los componentes de la ventana
+            SwingUtilities.updateComponentTreeUI(this);
+            repaint();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
