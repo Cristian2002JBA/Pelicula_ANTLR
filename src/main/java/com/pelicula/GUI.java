@@ -67,33 +67,34 @@ import com.pelicula.translators.CTranslatorVisitor;
 import com.pelicula.translators.CppTranslatorVisitor;
 import com.pelicula.translators.JavaScriptTranslatorVisitor;
 import com.pelicula.translators.PythonTranslatorVisitor;
+import com.pelicula.translators.ReverseTranslator;
 import com.pelicula.translators.TypeScriptTranslatorVisitor;
 
 public class GUI extends JFrame {
 
     // ── Visual Studio Blue Palette ──
-    private static final Color BG_DARK         = new Color(30, 30, 30);
-    private static final Color BG_EDITOR       = new Color(30, 30, 30);
-    private static final Color BG_SIDEBAR      = new Color(51, 51, 51);
-    private static final Color BG_TOOLBAR      = new Color(37, 37, 38);
-    private static final Color BG_CONSOLE      = new Color(24, 24, 24);
-    private static final Color ACCENT_PRIMARY  = new Color(0, 122, 204);     // VS Code Blue
-    private static final Color ACCENT_HOVER    = new Color(28, 151, 234);    // Lighter Blue
-    private static final Color ACCENT_SUCCESS  = new Color(78, 201, 176);    // Teal Green
-    private static final Color ACCENT_RUN      = new Color(22, 163, 74);     // Green for Run
-    private static final Color TEXT_PRIMARY     = new Color(212, 212, 212);
-    private static final Color TEXT_SECONDARY   = new Color(150, 150, 150);
-    private static final Color TEXT_MUTED       = new Color(100, 100, 100);
-    private static final Color BORDER_COLOR     = new Color(60, 60, 60);
-    private static final Color BTN_BG          = new Color(14, 99, 156);     // Button blue
-    private static final Color BTN_HOVER       = new Color(17, 119, 187);    // Button hover
+    static final Color BG_DARK         = new Color(30, 30, 30);
+    static final Color BG_EDITOR       = new Color(30, 30, 30);
+    static final Color BG_SIDEBAR      = new Color(51, 51, 51);
+    static final Color BG_TOOLBAR      = new Color(37, 37, 38);
+    static final Color BG_CONSOLE      = new Color(24, 24, 24);
+    static final Color ACCENT_PRIMARY  = new Color(0, 122, 204);     // VS Code Blue
+    static final Color ACCENT_HOVER    = new Color(28, 151, 234);    // Lighter Blue
+    static final Color ACCENT_SUCCESS  = new Color(78, 201, 176);    // Teal Green
+    static final Color ACCENT_RUN      = new Color(22, 163, 74);     // Green for Run
+    static final Color TEXT_PRIMARY     = new Color(212, 212, 212);
+    static final Color TEXT_SECONDARY   = new Color(150, 150, 150);
+    static final Color TEXT_MUTED       = new Color(100, 100, 100);
+    static final Color BORDER_COLOR     = new Color(60, 60, 60);
+    static final Color BTN_BG          = new Color(14, 99, 156);     // Button blue
+    static final Color BTN_HOVER       = new Color(17, 119, 187);    // Button hover
 
-    private RSyntaxTextArea editorArea;
-    private JTextArea consoleArea;
-    private JLabel statusLabel;
-    private String currentFilePath = null;
-    private JFileChooser fileChooser;
-    private GhostTextCompleter ghostCompleter;
+    RSyntaxTextArea editorArea;
+    JTextArea consoleArea;
+    JLabel statusLabel;
+    String currentFilePath = null;
+    JFileChooser fileChooser;
+    GhostTextCompleter ghostCompleter;
 
     public GUI() {
         initLookAndFeel();
@@ -103,7 +104,25 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG_DARK);
         fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de película (*.movie)", "movie"));
+        fileChooser.setAcceptAllFileFilterUsed(true);
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            private final java.util.Set<String> SUPPORTED = new java.util.HashSet<>(
+                java.util.Arrays.asList("movie", "py", "js", "ts", "c", "cpp", "asm"));
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) return true;
+                String name = f.getName();
+                int lastDot = name.lastIndexOf('.');
+                if (lastDot == -1) return true; // sin extensión
+                String ext = name.substring(lastDot + 1).toLowerCase();
+                return SUPPORTED.contains(ext);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Archivos Película y otros lenguajes (*.movie, *.py, *.js, *.ts, *.c, *.cpp, *.asm)";
+            }
+        });
 
         createEditor();
         createConsole();
@@ -214,8 +233,10 @@ public class GUI extends JFrame {
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
         btnPanel.setOpaque(false);
 
+        btnPanel.add(createPillButton("\u2795  Nuevo", e -> nuevoArchivo(), BTN_BG, BTN_HOVER));
         btnPanel.add(createPillButton("\uD83D\uDCC2  Abrir", e -> cargarArchivo(), BTN_BG, BTN_HOVER));
         btnPanel.add(createPillButton("\uD83D\uDCBE  Guardar", e -> guardarArchivo(), BTN_BG, BTN_HOVER));
+        btnPanel.add(createPillButton("\uD83C\uDFAC  ← .movie", e -> importarAMovie(), new Color(80, 40, 120), new Color(110, 60, 160)));
         btnPanel.add(createPillButton("\u25B6  Ejecutar", e -> ejecutarCompilacion(), ACCENT_RUN, new Color(34, 197, 94)));
         btnPanel.add(createPillButton("\uD83D\uDDD1  Limpiar", e -> consoleArea.setText(""), BTN_BG, BTN_HOVER));
         btnPanel.add(createPillButton("\uD83D\uDCE4  Exportar", e -> {
@@ -349,6 +370,9 @@ public class GUI extends JFrame {
 
         JMenu fileMenu = new JMenu("Archivo");
         fileMenu.setForeground(TEXT_SECONDARY);
+        JMenuItem newItem = new JMenuItem("Nuevo", KeyEvent.VK_N);
+        newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+        newItem.addActionListener(e -> nuevoArchivo());
         JMenuItem openItem = new JMenuItem("Abrir", KeyEvent.VK_O);
         openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         openItem.addActionListener(e -> cargarArchivo());
@@ -357,6 +381,7 @@ public class GUI extends JFrame {
         saveItem.addActionListener(e -> guardarArchivo());
         JMenuItem exitItem = new JMenuItem("Salir");
         exitItem.addActionListener(e -> System.exit(0));
+        fileMenu.add(newItem);
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.addSeparator();
@@ -379,6 +404,10 @@ public class GUI extends JFrame {
             item.addActionListener(e -> ejecutarTraduccion(lang.equals("C++") ? "Cpp" : lang));
             exportMenu.add(item);
         }
+        exportMenu.addSeparator();
+        JMenuItem importItem = new JMenuItem("\uD83C\uDFAC Importar a Película (.movie)");
+        importItem.addActionListener(e -> importarAMovie());
+        exportMenu.add(importItem);
         bar.add(exportMenu);
 
         return bar;
@@ -443,16 +472,23 @@ public class GUI extends JFrame {
             Director_cutParser.ProgramContext tree = parser.program();
 
             String codigo = "";
+            String ext = "";
             switch (lenguaje) {
-                case "Python": codigo = new PythonTranslatorVisitor().visit(tree); break;
-                case "JavaScript": codigo = new JavaScriptTranslatorVisitor().visit(tree); break;
-                case "TypeScript": codigo = new TypeScriptTranslatorVisitor().visit(tree); break;
-                case "C": codigo = new CTranslatorVisitor().visit(tree); break;
-                case "Cpp": codigo = new CppTranslatorVisitor().visit(tree); break;
-                case "Assembly": codigo = new AssemblyX86TranslatorVisitor().visit(tree); break;
+                case "Python": codigo = new PythonTranslatorVisitor().visit(tree); ext = "py"; break;
+                case "JavaScript": codigo = new JavaScriptTranslatorVisitor().visit(tree); ext = "js"; break;
+                case "TypeScript": codigo = new TypeScriptTranslatorVisitor().visit(tree); ext = "ts"; break;
+                case "C": codigo = new CTranslatorVisitor().visit(tree); ext = "c"; break;
+                case "Cpp": codigo = new CppTranslatorVisitor().visit(tree); ext = "cpp"; break;
+                case "Assembly": codigo = new AssemblyX86TranslatorVisitor().visit(tree); ext = "asm"; break;
+            }
+            String baseName = "salida";
+            if (currentFilePath != null) {
+                String name = new File(currentFilePath).getName();
+                int dotIndex = name.lastIndexOf('.');
+                baseName = (dotIndex > 0) ? name.substring(0, dotIndex) : name;
             }
             JFileChooser fc = new JFileChooser();
-            fc.setSelectedFile(new File("salida." + lenguaje.toLowerCase()));
+            fc.setSelectedFile(new File(baseName + "." + ext));
             if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try (FileWriter fw = new FileWriter(fc.getSelectedFile())) {
                     fw.write(codigo);
@@ -462,6 +498,22 @@ public class GUI extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al traducir: " + ex.getMessage());
         }
+    }
+
+    private void nuevoArchivo() {
+        if (!editorArea.getText().trim().isEmpty() && currentFilePath == null) {
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Deseas guardar los cambios antes de crear un nuevo archivo?", "Nuevo Archivo", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                guardarArchivo();
+            } else if (confirm == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        }
+        editorArea.setText("");
+        consoleArea.setText("");
+        currentFilePath = null;
+        setTitle("\uD83C\uDFAC Director's Cut IDE - Nuevo Archivo");
+        updateStatusBarCursor();
     }
 
     private void cargarArchivo() {
@@ -480,8 +532,12 @@ public class GUI extends JFrame {
     private void guardarArchivo() {
         if (currentFilePath == null) {
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                currentFilePath = fileChooser.getSelectedFile().getAbsolutePath();
-                setTitle("\uD83C\uDFAC Director's Cut IDE - " + fileChooser.getSelectedFile().getName());
+                File selected = fileChooser.getSelectedFile();
+                if (!selected.getName().contains(".")) {
+                    selected = new File(selected.getParent(), selected.getName() + ".movie");
+                }
+                currentFilePath = selected.getAbsolutePath();
+                setTitle("\uD83C\uDFAC Director's Cut IDE - " + selected.getName());
             } else return;
         }
         try (FileWriter fw = new FileWriter(currentFilePath)) {
@@ -489,6 +545,90 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Archivo guardado correctamente.");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
+        }
+    }
+
+    private void importarAMovie() {
+        // Detectar extensión del archivo actualmente abierto
+        String ext = "";
+        if (currentFilePath != null) {
+            int dot = currentFilePath.lastIndexOf('.');
+            if (dot >= 0) ext = currentFilePath.substring(dot + 1).toLowerCase();
+        }
+
+        // Si el archivo abierto no es de un lenguaje soportado, usar fileChooser
+        java.util.Set<String> LANGS = new java.util.HashSet<>(
+            java.util.Arrays.asList("py", "js", "ts", "c", "cpp", "asm"));
+
+        File sourceFile = null;
+        String sourceExt = ext;
+
+        if (LANGS.contains(ext) && currentFilePath != null) {
+            sourceFile = new File(currentFilePath);
+        } else {
+            // Pedir al usuario que seleccione el archivo fuente
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override public boolean accept(File f) {
+                    if (f.isDirectory()) return true;
+                    String n = f.getName().toLowerCase();
+                    return n.endsWith(".py") || n.endsWith(".js") || n.endsWith(".ts")
+                        || n.endsWith(".c") || n.endsWith(".cpp") || n.endsWith(".asm");
+                }
+                @Override public String getDescription() {
+                    return "Lenguajes soportados (*.py, *.js, *.ts, *.c, *.cpp, *.asm)";
+                }
+            });
+            if (fc.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
+            sourceFile = fc.getSelectedFile();
+            int dot = sourceFile.getName().lastIndexOf('.');
+            sourceExt = (dot >= 0) ? sourceFile.getName().substring(dot + 1).toLowerCase() : "";
+        }
+
+        if (!LANGS.contains(sourceExt)) {
+            JOptionPane.showMessageDialog(this, "Extensión no soportada para importar: ." + sourceExt);
+            return;
+        }
+
+        try {
+            // Leer el archivo fuente
+            StringBuilder sb = new StringBuilder();
+            try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(sourceFile))) {
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line).append("\n");
+            }
+
+            // Traducir inversamente a Película
+            String movieCode = ReverseTranslator.translate(sb.toString(), sourceExt);
+
+            // Sugerir nombre del archivo de salida: mismoNombre.movie
+            String baseName = sourceFile.getName();
+            int dot = baseName.lastIndexOf('.');
+            String outName = (dot > 0 ? baseName.substring(0, dot) : baseName) + ".movie";
+
+            JFileChooser saveFc = new JFileChooser();
+            saveFc.setCurrentDirectory(sourceFile.getParentFile());
+            saveFc.setSelectedFile(new File(sourceFile.getParentFile(), outName));
+            if (saveFc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
+
+            File outFile = saveFc.getSelectedFile();
+            if (!outFile.getName().contains(".")) {
+                outFile = new File(outFile.getParent(), outFile.getName() + ".movie");
+            }
+            try (FileWriter fw = new FileWriter(outFile)) {
+                fw.write(movieCode);
+            }
+
+            // Abrir el resultado en el editor
+            editorArea.setText(movieCode);
+            currentFilePath = outFile.getAbsolutePath();
+            setTitle("\uD83C\uDFAC Director's Cut IDE - " + outFile.getName());
+            JOptionPane.showMessageDialog(this,
+                "Importado y guardado como " + outFile.getName() + " correctamente.\n" +
+                "Revisa el c\u00f3digo generado antes de ejecutar.");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al importar: " + ex.getMessage());
         }
     }
 

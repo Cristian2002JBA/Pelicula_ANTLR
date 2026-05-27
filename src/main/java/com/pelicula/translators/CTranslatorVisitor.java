@@ -1,8 +1,12 @@
 package com.pelicula.translators;
 
 import com.pelicula.Director_cutParser.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CTranslatorVisitor extends BaseTranslatorVisitor {
+
+    private Map<String, String> symbolMap = new HashMap<>();
 
     @Override
     protected String getProgramStart() {
@@ -27,6 +31,7 @@ public class CTranslatorVisitor extends BaseTranslatorVisitor {
                 case "spoiler": cType = "bool"; break;
             }
         }
+        symbolMap.put(id, cType);
         return cType + " " + id + " = " + value + ";";
     }
 
@@ -43,9 +48,26 @@ public class CTranslatorVisitor extends BaseTranslatorVisitor {
     @Override
     public String visitPrintStmt(PrintStmtContext ctx) {
         String value = getPrintValue(ctx.valorImprimible());
-        String format = "\"%d\\n\""; // Asumimos int por defecto para simplificar en C, a menos que sea un string literal
+        String format = "\"%d\\n\""; 
+        
         if (value.startsWith("\"")) {
             format = "\"%s\\n\"";
+        } else if (symbolMap.containsKey(value)) {
+            String type = symbolMap.get(value);
+            if (type.equals("float")) format = "\"%.1f\\n\"";
+            else if (type.equals("char*")) format = "\"%s\\n\"";
+        } else {
+            // Inferir por contenido de expresión
+            boolean isFloat = value.contains(".");
+            for (String var : symbolMap.keySet()) {
+                if (value.contains(var) && "float".equals(symbolMap.get(var))) {
+                    isFloat = true;
+                    break;
+                }
+            }
+            if (isFloat) {
+                format = "\"%.1f\\n\"";
+            }
         }
         return getIndent() + "printf(" + format + ", " + value + ");\n";
     }

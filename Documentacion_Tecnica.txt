@@ -1,0 +1,37 @@
+DOCUMENTACIÓN TÉCNICA
+Proyecto 2: Traductor de Lenguaje Personalizado
+Lenguaje: "Película" (Director's Cut IDE)
+
+1. DESCRIPCIÓN GENERAL
+El presente proyecto consiste en la implementación de un IDE funcional ("Director's Cut") que soporta el análisis léxico, sintáctico y semántico de un lenguaje de programación personalizado de temática cinematográfica ("Película", con extensión .movie). El sistema incluye un intérprete nativo y traductores hacia seis lenguajes de programación diferentes, así como un mecanismo de importación de código externo.
+
+2. ARQUITECTURA DEL SISTEMA
+El sistema está construido en Java utilizando Apache Maven y sigue un modelo basado en el patrón Visitor. 
+Se compone de los siguientes módulos principales:
+
+- Analizador Léxico y Sintáctico: Definidos en "Director_cut.g4" y generados mediante ANTLR v4. Se encargan de construir el Árbol de Sintaxis Abstracta (AST).
+- Intérprete (DirectorCutVisitor): Recorre el AST para ejecutar el código de forma interpretada, gestionando el entorno de variables y evaluando expresiones lógicas y aritméticas en tiempo de ejecución.
+- Traductores Directos (C, C++, Python, JavaScript, TypeScript, Assembly): Un conjunto de clases que heredan de "BaseTranslatorVisitor". Convierten los nodos del AST del lenguaje Película en cadenas de texto con la sintaxis del lenguaje destino.
+- Traductor Inverso (ReverseTranslator): Permite cargar archivos .py, .js, .ts, .c, .cpp o .asm y, mediante un motor de reconocimiento de patrones estructurales (regex lineales y control de profundidad de bloques), reconstruir el código a la sintaxis nativa .movie.
+- Interfaz Gráfica (GUI): Desarrollada en Java Swing y RSyntaxTextArea. Proporciona resaltado de sintaxis nativo (PeliculaTokenMaker), sugerencias de autocompletado en línea (GhostTextCompleter) y captura de errores (CustomErrorListener) para mostrarlos en consola.
+
+3. ESTRUCTURA Y COMPONENTES DEL LENGUAJE "PELÍCULA"
+El lenguaje utiliza tokens contextualizados en la producción de cine:
+- Bloque principal: Todo programa inicia con "premiere { ... }".
+- Tipos de variables: "ticket" (enteros), "rating" (flotantes), "script" (cadenas), "spoiler" (booleanos).
+- Valores booleanos: "hit" (verdadero) y "flop" (falso).
+- Estructuras de control de flujo:
+    * Condicionales: "plot_twist" (if), "spin_off" (else if), "alternate_ending" (else).
+    * Ciclos: "replay" (funciona tanto como for o while dependiendo de los parámetros).
+- Operadores: "crossover" (+), "cut" (-), "franchise" (*), "split_screen" (/).
+- Salida por pantalla: "subtitle(valor);" reemplaza a la función print tradicional.
+
+4. FLUJO DE TRABAJO E INTERACCIÓN
+1. Edición: El usuario introduce código, el cual es coloreado en tiempo real según las reglas léxicas.
+2. Análisis de Errores: Al intentar ejecutar o exportar, un ErrorListener interviene. Si existen errores de sintaxis, se detiene el proceso y se muestran los errores con la línea exacta en la consola inferior.
+3. Ejecución: Si no hay errores, el AST pasa al intérprete y el resultado se emite a la consola inferior.
+4. Exportación: Al seleccionar un lenguaje destino en el menú, el traductor correspondiente recorre el AST e infiere los tipos de datos cuando es necesario (por ejemplo, decidiendo usar %.1f en C para variables tipo 'rating'). Se genera y guarda un archivo con la extensión nativa correspondiente (ej. .c, .py) conservando el mismo nombre base.
+5. Importación Inversa: Si se abre un archivo ajeno al lenguaje, la opción "Importar a Película" genera una versión en .movie adaptada a la sintaxis del proyecto.
+
+5. MANEJO DE TIPOS (SEMÁNTICA)
+El intérprete evalúa los tipos dinámicamente, mientras que traductores como C/C++ realizan una inferencia semántica básica para definir si se declara un "int", "float" o "std::string" basándose en el tipo definido en la gramática o en el valor primitivo asignado.
