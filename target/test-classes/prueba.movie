@@ -1,0 +1,26 @@
+premiere {
+    // 1. Declaración de variables matemáticas
+    ticket edad = 10;
+    cast contador = 0;
+
+    // 2. Imprimir texto
+    subtitle("Iniciando la pelicula de prueba...");
+
+    // 3. Condicional
+    plot_twist (edad > 5) {
+        subtitle("Es apta para la familia.");
+    } alternate_ending {
+        subtitle("Es para niños menores de 5 años.");
+    }
+
+    // 4. Bucle FOR
+    subtitle("Contando del 0 al 4:");
+    cast i = 0;
+    replay (i = 0 ; i < 5 ; i = i + 1) {
+        subtitle(i);
+        contador = contador + 2;
+    }
+
+    subtitle("El contador final es:");
+    subtitle(contador);
+}

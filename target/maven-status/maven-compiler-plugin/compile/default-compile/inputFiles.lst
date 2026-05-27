@@ -1,5 +1,13 @@
 C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\DirectorCutVisitor.java
 C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\Main.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\Simbolo.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\AssemblyX86TranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\BaseTranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\CppTranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\CTranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\JavaScriptTranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\PythonTranslatorVisitor.java
+C:\Users\chiva\Downloads\antlr-pelicual\src\main\java\com\pelicula\translators\TypeScriptTranslatorVisitor.java
 C:\Users\chiva\Downloads\antlr-pelicual\target\generated-sources\antlr4\com\pelicula\Director_cutBaseListener.java
 C:\Users\chiva\Downloads\antlr-pelicual\target\generated-sources\antlr4\com\pelicula\Director_cutBaseVisitor.java
 C:\Users\chiva\Downloads\antlr-pelicual\target\generated-sources\antlr4\com\pelicula\Director_cutLexer.java

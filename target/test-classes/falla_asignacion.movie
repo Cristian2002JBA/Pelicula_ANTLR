@@ -6,6 +6,7 @@ premiere {
     cast presupuesto_efectos = 250;
     
     // ERROR SEMÁNTICO: Producción intenta cambiar el valor de un número a un texto (STRING a INT)
+    
     presupuesto_efectos = "Ilimitado";
     
     subtitle("¡Corten! Este mensaje no se mostrará porque no puedes cambiar el tipo de dato de una variable.");

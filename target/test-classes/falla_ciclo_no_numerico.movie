@@ -1,8 +1,8 @@
 premiere {
     subtitle("--- PRUEBA: CICLO REPLAY NO NUMERICO ---");
     
-    // ERROR SEMÁNTICO: Tu ciclo REPLAY exige que la variable de control (toma)
-    // sea un INT o FLOAT. Aquí estamos usando texto ("primera").
+    // ERROR SEMÁNTICO: ciclo REPLAY exige que la variable de control 
+    // sea un INT o FLOAT. Aquí estamos usando texto 
     
     replay(toma = "primera"; toma == "primera"; toma = "segunda") {
         subtitle("Grabando...");
