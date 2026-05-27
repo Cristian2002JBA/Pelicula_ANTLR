@@ -22,6 +22,22 @@
             <artifactId>antlr4</artifactId>
             <version>${antlr4.version}</version>
         </dependency>
+        <!-- IDE Redesign Dependencies -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>autocomplete</artifactId>
+            <version>3.3.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
