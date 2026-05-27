@@ -3,6 +3,11 @@ package com.pelicula.translators;
 import com.pelicula.Director_cutBaseVisitor;
 import com.pelicula.Director_cutParser.*;
 
+/**
+ * Clase base abstracta para todos los traductores (C, C++, JS, TS, etc.).
+ * Implementa la estructura central del patrón Visitor de ANTLR.
+ * Las clases hijas solo necesitan definir cómo se escribe la sintaxis de cada lenguaje.
+ */
 public abstract class BaseTranslatorVisitor extends Director_cutBaseVisitor<String> {
     protected int indentationLevel = 0;
 
@@ -12,6 +17,7 @@ public abstract class BaseTranslatorVisitor extends Director_cutBaseVisitor<Stri
 
     @Override
     public String visitProgram(ProgramContext ctx) {
+        // Inicializamos el programa con las librerías o cabeceras necesarias
         StringBuilder builder = new StringBuilder();
         builder.append(getProgramStart());
         for (StatementContext stmt : ctx.statement()) {

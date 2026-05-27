@@ -31,6 +31,7 @@ public class JavaScriptTranslatorVisitor extends BaseTranslatorVisitor {
 
     @Override
     public String visitPrintStmt(PrintStmtContext ctx) {
+        // En JS usamos console.log para mostrar mensajes
         return getIndent() + "console.log(" + getPrintValue(ctx.valorImprimible()) + ");\n";
     }
 

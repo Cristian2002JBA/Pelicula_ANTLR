@@ -56,16 +56,19 @@ public class DirectorCutVisitor extends Director_cutBaseVisitor<Simbolo> {
 
             if (!esDeclaracion) {
                 Simbolo varDeclarada = tablaSimbolos.get(id);
+                // Si la variable no existe en la tabla de símbolos, fallamos.
                 if (varDeclarada == null) {
                     throw new RuntimeException(
                             "Error: Variable " + id + " no declarada. (Line:" + ctx.getStart().getLine() + ")");
                 }
+                // Validamos fuertemente los tipos. No dejamos asignar un string a un int, por ejemplo.
                 if (varDeclarada.tipo != valorSimbolo.tipo) {
 
                     throw new RuntimeException("Error: No se puede asignar " + valorSimbolo.tipo + " a "
                             + varDeclarada.tipo + ". (Line:" + ctx.getStart().getLine() + ")");
                 }
             } else {
+                // Controlamos que no se intente re-declarar una variable existente
                 if (tablaSimbolos.containsKey(id)) {
                     throw new RuntimeException(
                             "Error Semántico: No se puede declarar dos veces el mismo ROLE. La variable '" + id
@@ -251,6 +254,7 @@ public class DirectorCutVisitor extends Director_cutBaseVisitor<Simbolo> {
 
     @Override
     public Simbolo visitIfStmt(IfStmtContext ctx) {
+        // Evaluamos primero la condición principal del if (plot_twist)
         Simbolo cond = visit(ctx.condExpr(0));
 
         if (cond.tipo == Simbolo.TipoDato.BOOLEAN && (Boolean) cond.valor) {
@@ -293,13 +297,16 @@ public class DirectorCutVisitor extends Director_cutBaseVisitor<Simbolo> {
             tablaSimbolos.put(ctx.ROLE(0).getText(), val);
         }
 
+        // Este bucle se encarga de procesar la lógica de 'replay' (nuestro for/while)
         while (true) {
             Simbolo cond = visit(ctx.condExpr());
 
+            // Si la condición dejó de cumplirse, rompemos el ciclo
             if (cond.tipo != Simbolo.TipoDato.BOOLEAN || !(Boolean) cond.valor) {
                 break;
             }
 
+            // Ejecutamos todo el bloque interno en esta iteración
             visit(ctx.block());
 
             // Actualización

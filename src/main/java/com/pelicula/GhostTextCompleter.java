@@ -20,8 +20,8 @@ import javax.swing.text.JTextComponent;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
- * Ghost-text inline autocomplete for RSyntaxTextArea.
- * Shows a faded suggestion after the caret and accepts it with Tab.
+ * Clase encargada de mostrar sugerencias de texto "fantasma" en el editor (al estilo de Copilot).
+ * Muestra una sugerencia difuminada después del cursor que el usuario puede aceptar pulsando la tecla Tab.
  */
 public class GhostTextCompleter {
 
@@ -50,14 +50,15 @@ public class GhostTextCompleter {
             @Override public void changedUpdate(DocumentEvent e) { updateGhost(); }
         });
 
-        // Intercept Tab to accept ghost suggestion
+        // Interceptamos la tecla Tab para autocompletar la palabra sugerida
         editor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_TAB && ghostSuffix != null) {
-                    e.consume();
+                    e.consume(); // Evitamos que el Tab inserte un espacio o salte el foco
                     acceptGhost();
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    // Si el usuario pulsa Escape, ocultamos la sugerencia
                     ghostSuffix = null;
                     editor.repaint();
                 }
@@ -89,12 +90,14 @@ public class GhostTextCompleter {
         });
     }
 
+    // Método auxiliar para detectar qué palabra está escribiendo el usuario actualmente
     private String getCurrentWordPrefix() {
         try {
             int caretPos = editor.getCaretPosition();
             int lineStart = editor.getLineStartOffset(editor.getLineOfOffset(caretPos));
             String lineText = editor.getText(lineStart, caretPos - lineStart);
-            // Walk backwards to find start of current word
+            
+            // Recorremos hacia atrás para encontrar el inicio de la palabra actual
             int wordStart = lineText.length();
             while (wordStart > 0) {
                 char c = lineText.charAt(wordStart - 1);

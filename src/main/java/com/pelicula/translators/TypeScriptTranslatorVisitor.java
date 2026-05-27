@@ -9,6 +9,7 @@ public class TypeScriptTranslatorVisitor extends JavaScriptTranslatorVisitor {
 
     @Override
     protected String getDeclarationString(String id, String value, String type, boolean isCast, boolean isStar) {
+        // En TS las variables pueden tener un tipo específico usando la sintaxis 'let nombre: tipo = valor'
         String tsType = "any";
         if (type != null) {
             switch(type) {

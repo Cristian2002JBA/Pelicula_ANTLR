@@ -7,11 +7,13 @@ public class CppTranslatorVisitor extends CTranslatorVisitor {
     @Override
     protected String getProgramStart() {
         indentationLevel = 1;
+        // Importamos iostream y string para asegurarnos de que cout y los strings funcionen
         return "#include <iostream>\n#include <string>\n\nint main() {\n";
     }
 
     @Override
     protected String getDeclarationString(String id, String value, String type, boolean isCast, boolean isStar) {
+        // En C++ usamos 'auto' por defecto, pero si tenemos un tipo específico, lo mapeamos
         String cppType = "auto";
         if (type != null) {
             switch(type) {

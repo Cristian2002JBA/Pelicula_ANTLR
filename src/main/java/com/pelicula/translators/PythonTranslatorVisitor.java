@@ -37,6 +37,7 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
 
     @Override
     public String visitPrintStmt(PrintStmtContext ctx) {
+        // En Python la función de impresión es simplemente 'print()'
         return getIndent() + "print(" + getPrintValue(ctx.valorImprimible()) + ")\n";
     }
 
@@ -44,6 +45,7 @@ public class PythonTranslatorVisitor extends BaseTranslatorVisitor {
     public String visitIfStmt(IfStmtContext ctx) {
         StringBuilder sb = new StringBuilder();
         
+        // Python no usa llaves, por lo que marcamos el bloque con ':' y manejamos la indentación en el helper
         sb.append(getIndent()).append("if ").append(visit(ctx.condExpr(0))).append(":\n");
         sb.append(formatBlockPython(ctx.block(0)));
 

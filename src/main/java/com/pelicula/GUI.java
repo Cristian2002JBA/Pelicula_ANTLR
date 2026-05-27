@@ -97,11 +97,12 @@ public class GUI extends JFrame {
     GhostTextCompleter ghostCompleter;
 
     public GUI() {
+        // Configuramos el tema oscuro y los estilos de la interfaz al arrancar
         initLookAndFeel();
         setTitle("\uD83C\uDFAC Director's Cut IDE");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1200, 850);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // Centramos la ventana en pantalla
         getContentPane().setBackground(BG_DARK);
         fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(true);
@@ -445,7 +446,9 @@ public class GUI extends JFrame {
         am.put("run", new AbstractAction() { public void actionPerformed(ActionEvent e) { ejecutarCompilacion(); } });
     }
 
+    // Lanza la evaluación del código escrito en el editor
     private void ejecutarCompilacion() {
+        // Limpiamos la consola para no mezclar ejecuciones anteriores
         consoleArea.setText("");
         try {
             CharStream in = CharStreams.fromString(editorArea.getText());
@@ -566,7 +569,7 @@ public class GUI extends JFrame {
         if (LANGS.contains(ext) && currentFilePath != null) {
             sourceFile = new File(currentFilePath);
         } else {
-            // Pedir al usuario que seleccione el archivo fuente
+            // Si no estamos en un archivo soportado, le pedimos al usuario que elija el archivo original
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(new javax.swing.filechooser.FileFilter() {
                 @Override public boolean accept(File f) {
@@ -579,7 +582,7 @@ public class GUI extends JFrame {
                     return "Lenguajes soportados (*.py, *.js, *.ts, *.c, *.cpp, *.asm)";
                 }
             });
-            if (fc.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
+            if (fc.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return; // Si cancela, no hacemos nada
             sourceFile = fc.getSelectedFile();
             int dot = sourceFile.getName().lastIndexOf('.');
             sourceExt = (dot >= 0) ? sourceFile.getName().substring(dot + 1).toLowerCase() : "";

@@ -1,6 +1,8 @@
 package com.pelicula;
 
 public class Simbolo {
+    
+    // Representa los tipos de datos básicos que maneja nuestro lenguaje
     public enum TipoDato {
         INT, FLOAT, BOOLEAN, STRING
     }

@@ -11,6 +11,7 @@ public class CTranslatorVisitor extends BaseTranslatorVisitor {
     @Override
     protected String getProgramStart() {
         indentationLevel = 1;
+        // Cabeceras estándar de C para entrada/salida y booleanos
         return "#include <stdio.h>\n#include <stdbool.h>\n\nint main() {\n";
     }
 
@@ -50,6 +51,7 @@ public class CTranslatorVisitor extends BaseTranslatorVisitor {
         String value = getPrintValue(ctx.valorImprimible());
         String format = "\"%d\\n\""; 
         
+        // Inferimos el formato para printf dependiendo del tipo de dato
         if (value.startsWith("\"")) {
             format = "\"%s\\n\"";
         } else if (symbolMap.containsKey(value)) {
@@ -57,7 +59,7 @@ public class CTranslatorVisitor extends BaseTranslatorVisitor {
             if (type.equals("float")) format = "\"%.1f\\n\"";
             else if (type.equals("char*")) format = "\"%s\\n\"";
         } else {
-            // Inferir por contenido de expresión
+            // Si es una expresión aritmética, intentamos deducir si es un número decimal (float)
             boolean isFloat = value.contains(".");
             for (String var : symbolMap.keySet()) {
                 if (value.contains(var) && "float".equals(symbolMap.get(var))) {

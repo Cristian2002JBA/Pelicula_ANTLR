@@ -15,9 +15,11 @@ public class AssemblyX86TranslatorVisitor extends Director_cutBaseVisitor<String
     private Set<String> declaredVars = new HashSet<>();
 
     public AssemblyX86TranslatorVisitor() {
+        // Preparamos la sección de datos (para variables globales o literales string)
         dataSection.append("section .data\n");
         dataSection.append("    format_int db \"%lld\", 10, 0\n");
 
+        // Preparamos la sección de código ejecutable
         textSection.append("section .text\n");
         textSection.append("    global main\n");
         textSection.append("    extern printf\n\n");
@@ -105,6 +107,7 @@ public class AssemblyX86TranslatorVisitor extends Director_cutBaseVisitor<String
 
     @Override
     public String visitIfStmt(IfStmtContext ctx) {
+        // Creamos etiquetas únicas para controlar los saltos del if/else
         String lEnd = newLabel();
         StringBuilder sb = new StringBuilder();
 

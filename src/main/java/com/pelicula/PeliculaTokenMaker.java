@@ -8,6 +8,7 @@ import org.fife.ui.rsyntaxtextarea.TokenMap;
 
 public class PeliculaTokenMaker extends AbstractTokenMaker {
 
+    // Definimos el resaltado de sintaxis (colores) para las palabras clave de Película
     @Override
     public TokenMap getWordsToHighlight() {
         TokenMap tokenMap = new TokenMap();

@@ -29,6 +29,8 @@ public class Main {
             Director_cutParser.ProgramContext tree = parser.program();
 
             System.out.println("\n--- EJECUCIÓN DEL PROGRAMA ---");
+            // Ejecutamos el árbol sintáctico usando el patrón visitor
+            // Esto recorre todo el código fuente y procesa las instrucciones
             DirectorCutVisitor visitor = new DirectorCutVisitor();
             visitor.visit(tree);
 
@@ -60,10 +62,13 @@ public class Main {
 
             System.out.println("Todas las traducciones fueron generadas correctamente.");
 
+            // Marcamos el fin del procesamiento de este archivo en la consola
             System.out.println("\nFINISH: " + file);
         }
     }
 
+    // Función utilitaria para escribir las traducciones a disco
+    // Centralizamos esto para no repetir el bloque try-catch en cada lenguaje
     private static void guardarArchivo(String nombreArchivo, String contenido) {
         try (FileWriter writer = new FileWriter(nombreArchivo)) {
             writer.write(contenido);
