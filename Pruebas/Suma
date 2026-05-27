@@ -1,0 +1,11 @@
+premiere {
+    subtitle("Sumatoria del 1 al 10:");
+    cast limite = 10;
+    cast sumaTotal = 0;
+    cast i = 1;
+    replay (i = 1 ; i < limite + 1 ; i = i + 1) {
+        sumaTotal = sumaTotal + i;
+    }
+    subtitle("La suma es:");
+    subtitle(sumaTotal);
+}

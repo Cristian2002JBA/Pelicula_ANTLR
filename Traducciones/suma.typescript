@@ -1,0 +1,10 @@
+// Traducción a TypeScript
+console.log("Sumatoria del 1 al 10:");
+let limite: any = 10;
+let sumaTotal: any = 0;
+let i: any = 1;
+for (let i = 1; i < limite + 1; i = i + 1) {
+    sumaTotal = sumaTotal + i;
+}
+console.log("La suma es:");
+console.log(sumaTotal);

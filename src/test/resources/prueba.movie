@@ -1,26 +1,111 @@
 premiere {
-    // 1. Declaración de variables matemáticas
-    ticket edad = 10;
-    cast contador = 0;
+    subtitle("====== ALGORITMOS DE PRUEBA ======");
 
-    // 2. Imprimir texto
-    subtitle("Iniciando la pelicula de prueba...");
+    // ---------------------------------------------------------
+    // 1. Cálculo de Factorial (Factorial de 5 = 120)
+    // ---------------------------------------------------------
+    subtitle("1. FACTORIAL DE 5:");
+    cast n = 5;
+    cast fact = 1;
+    cast i = 1;
+    replay (i = 1 ; i < n + 1 ; i = i + 1) {
+        fact = fact * i;
+    }
+    subtitle(fact);
 
-    // 3. Condicional
-    plot_twist (edad > 5) {
-        subtitle("Es apta para la familia.");
+    // ---------------------------------------------------------
+    // 2. Serie Fibonacci (Primeros 7 números)
+    // ---------------------------------------------------------
+    subtitle("2. FIBONACCI (7 iteraciones):");
+    cast a = 0;
+    cast b = 1;
+    cast c = 0;
+    cast iFibo = 0;
+    replay (iFibo = 0 ; iFibo < 7 ; iFibo = iFibo + 1) {
+        subtitle(a);
+        c = a + b;
+        a = b;
+        b = c;
+    }
+
+    // ---------------------------------------------------------
+    // 3. Números Primos (Verificar si 7 es primo)
+    // ---------------------------------------------------------
+    subtitle("3. NUMEROS PRIMOS (Checando el 7):");
+    cast numPrimo = 7;
+    cast esPrimo = 1;
+    cast iPrimo = 2;
+    replay (iPrimo = 2 ; iPrimo < numPrimo ; iPrimo = iPrimo + 1) {
+        // Simulando el operador modulo (%) con enteros: num - (num / i) * i
+        cast division = numPrimo / iPrimo;
+        cast multiplicacion = division * iPrimo;
+        plot_twist (multiplicacion == numPrimo) {
+            esPrimo = 0; // Se pudo dividir exactamente, no es primo
+        }
+    }
+    plot_twist (esPrimo == 1) {
+        subtitle("El numero SI es primo.");
     } alternate_ending {
-        subtitle("Es para niños menores de 5 años.");
+        subtitle("El numero NO es primo.");
     }
 
-    // 4. Bucle FOR
-    subtitle("Contando del 0 al 4:");
-    cast i = 0;
-    replay (i = 0 ; i < 5 ; i = i + 1) {
-        subtitle(i);
-        contador = contador + 2;
+    // ---------------------------------------------------------
+    // 4. Tablas de multiplicar (Tabla del 5)
+    // ---------------------------------------------------------
+    subtitle("4. TABLA DEL 5:");
+    cast tabla = 5;
+    cast iTabla = 1;
+    replay (iTabla = 1 ; iTabla < 11 ; iTabla = iTabla + 1) {
+        cast resTabla = tabla * iTabla;
+        subtitle(resTabla);
     }
 
-    subtitle("El contador final es:");
-    subtitle(contador);
+    // ---------------------------------------------------------
+    // 5. Máximo Común Divisor (MCD de 48 y 18 = 6)
+    // ---------------------------------------------------------
+    subtitle("5. MAXIMO COMUN DIVISOR DE 48 Y 18:");
+    cast numA = 48;
+    cast numB = 18;
+    cast mcd = 1;
+    cast iMcd = 1;
+    // Iteramos hasta el menor de los dos numeros
+    replay (iMcd = 1 ; iMcd < numB + 1 ; iMcd = iMcd + 1) {
+        cast divA = numA / iMcd;
+        cast prodA = divA * iMcd;
+        cast remA = numA - prodA;
+
+        cast divB = numB / iMcd;
+        cast prodB = divB * iMcd;
+        cast remB = numB - prodB;
+
+        plot_twist (remA == 0) {
+            plot_twist (remB == 0) {
+                mcd = iMcd; // Si divide a ambos, lo guardamos
+            }
+        }
+    }
+    subtitle(mcd);
+
+    // ---------------------------------------------------------
+    // 6. Sumatorias (Suma de los primeros 10 números)
+    // ---------------------------------------------------------
+    subtitle("6. SUMATORIA DEL 1 AL 10:");
+    cast sumLimit = 10;
+    cast sumaTotal = 0;
+    cast iSum = 1;
+    replay (iSum = 1 ; iSum < sumLimit + 1 ; iSum = iSum + 1) {
+        sumaTotal = sumaTotal + iSum;
+    }
+    subtitle(sumaTotal);
+
+    // ---------------------------------------------------------
+    // 7. Promedios (Promedio de 5 calificaciones)
+    // ---------------------------------------------------------
+    subtitle("7. PROMEDIOS (Suma = 45, Cantidad = 5):");
+    cast sumaCalifs = 45;
+    cast cantCalifs = 5;
+    cast promedio = sumaCalifs / cantCalifs;
+    subtitle("El promedio es:");
+    subtitle(promedio);
+
 }

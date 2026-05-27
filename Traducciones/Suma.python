@@ -1,0 +1,11 @@
+# Traducción a Python
+print("Sumatoria del 1 al 10:")
+limite = 10
+sumaTotal = 0
+i = 1
+i = 1
+while i < limite + 1:
+    sumaTotal = sumaTotal + i
+    i = i + 1
+print("La suma es:")
+print(sumaTotal)
