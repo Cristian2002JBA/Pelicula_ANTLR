@@ -1,0 +1,32 @@
+premiere {
+    subtitle("Maximo Comun Divisor de 48 y 18:");
+    cast numA = 48;
+    cast numB = 18;
+    cast mcd = 1;
+    cast i = 1;
+    
+    cast divA = 0;
+    cast prodA = 0;
+    cast remA = 0;
+    cast divB = 0;
+    cast prodB = 0;
+    cast remB = 0;
+    
+    replay (i = 1 ; i < numB + 1 ; i = i + 1) {
+        divA = numA / i;
+        prodA = divA * i;
+        remA = numA - prodA;
+
+        divB = numB / i;
+        prodB = divB * i;
+        remB = numB - prodB;
+
+        plot_twist (remA == 0) {
+            plot_twist (remB == 0) {
+                mcd = i;
+            }
+        }
+    }
+    subtitle("El MCD es:");
+    subtitle(mcd);
+}

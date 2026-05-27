@@ -1,0 +1,21 @@
+premiere {
+    subtitle("Verificar si el 7 es Primo:");
+    cast num = 7;
+    cast esPrimo = 1;
+    cast i = 2;
+    cast division = 0;
+    cast multiplicacion = 0;
+    
+    replay (i = 2 ; i < num ; i = i + 1) {
+        division = num / i;
+        multiplicacion = division * i;
+        plot_twist (multiplicacion == num) {
+            esPrimo = 0; 
+        }
+    }
+    plot_twist (esPrimo == 1) {
+        subtitle("El numero SI es primo.");
+    } alternate_ending {
+        subtitle("El numero NO es primo.");
+    }
+}

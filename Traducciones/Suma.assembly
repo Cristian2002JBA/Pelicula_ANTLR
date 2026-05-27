@@ -1,0 +1,67 @@
+section .data
+    format_int db "%lld", 10, 0
+    str0 db "Sumatoria del 1 al 10:", 10, 0
+    limite dq 0
+    sumaTotal dq 0
+    i dq 0
+    str1 db "La suma es:", 10, 0
+
+section .text
+    global main
+    extern printf
+
+main:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 32
+    lea rcx, [rel str0]
+    call printf
+    mov rax, 10
+    mov qword [rel limite], rax
+    mov rax, 0
+    mov qword [rel sumaTotal], rax
+    mov rax, 1
+    mov qword [rel i], rax
+    mov rax, 1
+    mov qword [rel i], rax
+L0:
+    mov rax, qword [rel i]
+    push rax
+    mov rax, qword [rel limite]
+    push rax
+    mov rax, 1
+    mov rbx, rax
+    pop rax
+    add rax, rbx
+    mov rbx, rax
+    pop rax
+    cmp rax, rbx
+    jl L2
+    jmp L1
+L2:
+    mov rax, qword [rel sumaTotal]
+    push rax
+    mov rax, qword [rel i]
+    mov rbx, rax
+    pop rax
+    add rax, rbx
+    mov qword [rel sumaTotal], rax
+    mov rax, qword [rel i]
+    push rax
+    mov rax, 1
+    mov rbx, rax
+    pop rax
+    add rax, rbx
+    mov qword [rel i], rax
+    jmp L0
+L1:
+    lea rcx, [rel str1]
+    call printf
+    mov rax, qword [rel sumaTotal]
+    lea rcx, [rel format_int]
+    mov rdx, rax
+    call printf
+    add rsp, 32
+    mov eax, 0
+    pop rbp
+    ret

@@ -1,0 +1,13 @@
+premiere {
+    subtitle("Serie Fibonacci (7 iteraciones):");
+    cast a = 0;
+    cast b = 1;
+    cast c = 0;
+    cast i = 0;
+    replay (i = 0 ; i < 7 ; i = i + 1) {
+        subtitle(a);
+        c = a + b;
+        a = b;
+        b = c;
+    }
+}
